@@ -20,7 +20,7 @@ const LearningPlanDetail = () => {
   // TODO: In a real app, this would be determined by user role from authentication
   const [isAdmin] = useState(true);
   const navigate = useNavigate();
-  
+
   const fetchPlan = async () => {
     try {
       if (id) {
@@ -43,15 +43,22 @@ const LearningPlanDetail = () => {
       }
     }
   };
-  
+
   useEffect(() => {
     fetchPlan();
   }, [id]);
-  
+
   const handlePlanDeleted = () => {
     navigate("/learning-plans");
   };
-  
+
+  const handleDownload = () => {
+    if (plan?.pdfUrl) {
+      // Open the PDF URL in a new tab
+      window.open(plan.pdfUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -59,7 +66,7 @@ const LearningPlanDetail = () => {
       </div>
     );
   }
-  
+
   if (!plan) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
@@ -68,21 +75,21 @@ const LearningPlanDetail = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-start mb-4">
           <h1 className="text-3xl font-bold">{plan.title}</h1>
-          
+
           {isAdmin && (
-            <AdminLearningPlanActions 
-              plan={plan} 
-              onSuccess={handlePlanDeleted} 
+            <AdminLearningPlanActions
+              plan={plan}
+              onSuccess={handlePlanDeleted}
             />
           )}
         </div>
-        
+
         <div className="mb-8 flex items-center space-x-4">
           <Avatar>
             <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=mentor" />
@@ -96,7 +103,7 @@ const LearningPlanDetail = () => {
             <Button variant="outline" size="sm">Follow</Button>
           </div>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           <div className="md:col-span-2">
             <div className="rounded-xl overflow-hidden mb-6">
@@ -106,15 +113,15 @@ const LearningPlanDetail = () => {
                 className="w-full h-auto object-cover"
               />
             </div>
-            
+
             <div className="prose max-w-none">
               <h2 className="text-2xl font-semibold mb-4">About this Learning Plan</h2>
               <p className="text-gray-700 whitespace-pre-line">{plan.description}</p>
-              
+
               <LearningFeatures />
             </div>
           </div>
-          
+
           <div>
             <Card className="sticky top-24">
               <CardHeader className="pb-2">
@@ -132,15 +139,16 @@ const LearningPlanDetail = () => {
                       <span>PDF Resources</span>
                     </div>
                   </div>
-                  
+
                   <Button className="w-full gradient-bg">Start Learning</Button>
-                  <Button variant="outline" className="w-full flex items-center justify-center">
+                  <Button variant="outline" className="w-full flex items-center justify-center" onClick={handleDownload}
+                    disabled={!plan.pdfUrl}>
                     <Download className="mr-2 h-4 w-4" />
                     Download Plan
                   </Button>
-                  
+
                   <Separator />
-                  
+
                   <div className="space-y-3">
                     <h4 className="font-medium">Plan Includes:</h4>
                     <div className="flex items-start">
