@@ -1,73 +1,144 @@
-# Welcome to your Lovable project
+# SkillSwap : Skill-Sharing & Learning Platform
 
-## Project info
 
-**URL**: https://lovable.dev/projects/e593339a-6edf-4198-9a21-03f780661332
 
-## How can I edit this code?
+A web application designed to connect individuals who want to share and learn various skills in a dynamic community environment.
 
-There are several ways of editing your application.
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [Team Members](#team-members)
+- [API Documentation](#api-documentation)
+- [License](#license)
 
-**Use Lovable**
+## Project Overview
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/e593339a-6edf-4198-9a21-03f780661332) and start prompting.
+SkillSwap is a platform where users can:
+- Share their expertise in various skills (coding, cooking, photography, etc.)
+- Document and share their learning journeys
+- Connect with others through interactive features
+- Create and follow structured learning plans
 
-Changes made via Lovable will be committed automatically to this repo.
+### Business Objectives
+- Provide a user-friendly platform for skill sharing
+- Foster a community of learners and teachers
+- Enable structured learning with progress tracking
+- Facilitate user engagement through social features
+- Create a safe and accessible environment for knowledge exchange
 
-**Use your preferred IDE**
+## Features
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Core Functionalities
+- **User Authentication**: OAuth 2.0 login with social media accounts
+- **Skill Sharing**: Create posts with multimedia content
+- **Learning Progress**: Track and share learning milestones
+- **Learning Plans**: Create structured learning paths
+- **Social Interaction**: Like, comment, and follow other users
+- **Notifications**: Real-time updates on engagements
+- **Content Discovery**: Search and filter skills/users
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Technical Features
+- **Frontend**: React-based responsive UI
+- **Backend**: Spring Boot REST API
+- **Database**: (Specify your database)
+- **Authentication**: OAuth 2.0 implementation
+- **API**: Comprehensive RESTful endpoints
 
-Follow these steps:
+## Technologies
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Frontend
+- React.js
+- HTML5/CSS3
+- JavaScript (ES6+)
+- Axios for API calls
+- (Add any other frontend libraries)
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Backend
+- Spring Boot
+- Java 11+
+- Spring Security (OAuth 2.0)
+- (Add database technology)
+- (Add any other backend dependencies)
 
-# Step 3: Install the necessary dependencies.
-npm i
+### DevOps
+- GitHub (Version Control)
+- (Add CI/CD tools if any)
+- (Add deployment platform if any)
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+## Installation
+
+### Prerequisites
+- Node.js (v14+)
+- Java JDK (11+)
+- (Add any other prerequisites)
+
+### Backend Setup
+```bash
+# Clone the repository
+git clone https://github.com/Ushan2001/PAF_PRO.git
+
+# Navigate to backend directory
+cd skillswap/backend
+
+# Build the project
+./mvnw clean install
+
+# Run the application
+./mvnw spring-boot:run
 ```
 
-**Edit a file directly in GitHub**
+### Frontend Setup
+```bash
+# Navigate to frontend directory
+cd skillswap/frontend
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+# Install dependencies
+npm install
 
-**Use GitHub Codespaces**
+# Run the development server
+npm start
+```
+# SkillSwap : Skill-Sharing & Learning Platform
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Team Members
 
-## What technologies are used for this project?
+| Name                     | IT Number    | Responsibility                     |
+|--------------------------|--------------|------------------------------------|
+| M Wanniarachchi W.A. P   | IT22103154   | Skill Post Management              |
+| Pathiraja P.U.M          | IT22243362   | Rating & Review Management         |
+| Hettiarachchi R.H        | IT22120052   | Comment Management                 |
+| Jayasooriya L. T         | IT22095480   | Learning Plan Management           |
 
-This project is built with:
+## API Documentation
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Our comprehensive API documentation covers the following endpoints:
 
-## How can I deploy this project?
+### User Management
+- Authentication (OAuth 2.0)
+- Profile creation/retrieval/update
+- User following system
 
-Simply open [Lovable](https://lovable.dev/projects/e593339a-6edf-4198-9a21-03f780661332) and click on Share -> Publish.
+### Content Management
+- Skill post CRUD operations
+- Media upload handling
+- Learning plan management
 
-## Can I connect a custom domain to my Lovable project?
+### Social Features
+- Like/comment functionality
+- Notification system
+- Content discovery and search
 
-Yes it is!
+[View Full API Documentation](#) <!-- Replace with actual link -->
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## License
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+---
+
+**Sri Lanka Institute of Information Technology**  
+**Programming Applications and Frameworks (IT3030)**  
+**2025 Semester 2**
+
