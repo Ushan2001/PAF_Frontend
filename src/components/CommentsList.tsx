@@ -73,7 +73,7 @@ const CommentsList = ({ comments, postId, onCommentUpdated }: CommentsListProps)
       <div className="space-y-6">
         {comments.map((comment) => (
           comment.id === commentToEdit.id ? (
-            <Card key={comment.id} className="border-amber-200 dark:border-amber-800 shadow-md animate-pulse">
+            <Card key={comment.id} className="border-amber-200 dark:border-amber-800 shadow-md">
               <CardContent className="pt-6">
                 <CommentForm
                   postId={postId}
