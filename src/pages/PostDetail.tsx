@@ -1,18 +1,19 @@
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getPostById } from "@/services/postsApi";
-import { getCommentsByPostId } from "@/services/commentsApi";
-import { Post, Comment } from "@/types";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Clock, ThumbsUp, ThumbsDown, Eye, Share2 } from "lucide-react";
-import CommentsList from "@/components/CommentsList";
+import AdminPostActions from "@/components/AdminPostActions";
 import CommentForm from "@/components/CommentForm";
-import PostAuthor from "@/components/PostAuthor";
+import CommentsList from "@/components/CommentsList";
 import LearningFeatures from "@/components/LearningFeatures";
 import LoadingPlaceholder from "@/components/LoadingPlaceholder";
+import PostAuthor from "@/components/PostAuthor";
 import RatingComponent from "@/components/RatingComponent";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import { getCommentsByPostId } from "@/services/commentsApi";
+import { getPostById } from "@/services/postsApi";
+import { Comment, Post } from "@/types";
+import { Clock, Eye, Share2, ThumbsDown, ThumbsUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const PostDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -21,16 +22,18 @@ const PostDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
-  
+  const [isAdmin] = useState(true);
+  const navigate = useNavigate();
+
   const fetchData = async () => {
     try {
       if (id) {
         setLoading(true);
         setError(null);
-        
+
         const postData = await getPostById(parseInt(id));
         setPost(postData);
-        
+
         try {
           const commentsData = await getCommentsByPostId(parseInt(id));
           setComments(commentsData);
@@ -51,15 +54,19 @@ const PostDetail = () => {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchData();
   }, [id]);
-  
+
+  const handlePostDeleted = () => {
+    navigate("/posts");
+  };
+
   const handleCommentAdded = (newComment: Comment) => {
     setComments(prev => [newComment, ...prev]);
   };
-  
+
   const handleCommentsUpdated = () => {
     if (id) {
       getCommentsByPostId(parseInt(id))
@@ -69,7 +76,7 @@ const PostDetail = () => {
         });
     }
   };
-  
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -77,7 +84,7 @@ const PostDetail = () => {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
@@ -87,7 +94,7 @@ const PostDetail = () => {
       </div>
     );
   }
-  
+
   if (!post) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
@@ -96,14 +103,23 @@ const PostDetail = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
+        {/* Header section with title and admin actions */}
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold">{post.title}</h1>
+          {isAdmin && (
+            <AdminPostActions
+              post={post}
+              onSuccess={handlePostDeleted}
+            />
+          )}
+        </div>
         
         <PostAuthor />
-        
+
         <div className="rounded-lg overflow-hidden my-8">
           {post.imageUrl && (
             <img
@@ -116,7 +132,7 @@ const PostDetail = () => {
             />
           )}
         </div>
-        
+
         <div className="flex items-center space-x-6 mb-6">
           <div className="flex items-center text-sm text-gray-500">
             <Clock className="h-4 w-4 mr-1" />
@@ -127,13 +143,13 @@ const PostDetail = () => {
             <span>1.2k views</span>
           </div>
         </div>
-        
+
         <div className="prose max-w-none mb-8">
           <p className="text-gray-700 whitespace-pre-line">{post.description}</p>
         </div>
-        
+
         <RatingComponent postId={post.id} />
-        
+
         <div className="flex items-center space-x-2 my-8">
           <Button variant="outline" size="sm" className="flex items-center">
             <ThumbsUp className="h-4 w-4 mr-2" />
@@ -148,26 +164,26 @@ const PostDetail = () => {
             Share
           </Button>
         </div>
-        
+
         <Separator className="my-8" />
-        
+
         <LearningFeatures />
-        
+
         <Separator className="my-8" />
-        
+
         <h2 className="text-2xl font-semibold mb-6">Comments ({comments.length})</h2>
-        
-        <CommentForm 
-          postId={post.id} 
-          onCommentAdded={handleCommentAdded} 
+
+        <CommentForm
+          postId={post.id}
+          onCommentAdded={handleCommentAdded}
         />
-        
+
         <div className="mt-8">
           {comments.length > 0 ? (
-            <CommentsList 
-              comments={comments} 
-              postId={post.id} 
-              onCommentUpdated={handleCommentsUpdated} 
+            <CommentsList
+              comments={comments}
+              postId={post.id}
+              onCommentUpdated={handleCommentsUpdated}
             />
           ) : (
             <p className="text-gray-500 text-center py-6">No comments yet. Be the first to leave a comment!</p>
