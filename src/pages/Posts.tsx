@@ -1,13 +1,12 @@
-
-import { useEffect, useState } from "react";
-import { Post } from "@/types";
-import { getPosts } from "@/services/api";
+import AdminPostForm from "@/components/AdminPostForm";
 import SkillCard from "@/components/SkillCard";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Filter, Search, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import UserPostForm from "@/components/UserPostForm";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { getPosts } from "@/services/api";
+import { Post } from "@/types";
+import { AlertCircle, Filter, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const Posts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -15,7 +14,9 @@ const Posts = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  
+  // TODO: In a real app, this would be determined by user role from authentication
+  const [isAdmin] = useState(true);
+
   const fetchPosts = async () => {
     try {
       setLoading(true);
@@ -29,14 +30,14 @@ const Posts = () => {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
     fetchPosts();
   }, []);
-  
+
   useEffect(() => {
     if (searchTerm) {
-      const filtered = posts.filter(post => 
+      const filtered = posts.filter(post =>
         post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         post.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -45,7 +46,7 @@ const Posts = () => {
       setFilteredPosts(posts);
     }
   }, [searchTerm, posts]);
-  
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -61,7 +62,7 @@ const Posts = () => {
       </div>
     );
   }
-  
+
   if (error) {
     return (
       <div className="container mx-auto px-4 py-12">
@@ -76,16 +77,18 @@ const Posts = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
         <h1 className="text-3xl font-bold">Browse Skills</h1>
         <div className="mt-4 sm:mt-0">
-          <UserPostForm onSuccess={fetchPosts} />
+          {isAdmin && (
+            <AdminPostForm mode="create" onSuccess={fetchPosts} />
+          )}
         </div>
       </div>
-      
+
       <div className="mb-8 flex flex-col sm:flex-row gap-4">
         <div className="relative flex-grow">
           <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
@@ -102,11 +105,22 @@ const Posts = () => {
           Filter
         </Button>
       </div>
-      
+
       {filteredPosts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPosts.map((post) => (
-            <SkillCard key={post.id} post={post} />
+            <div key={post.id} className="relative">
+              <SkillCard post={post} />
+              {isAdmin && (
+                <div className="absolute top-2 right-2 flex space-x-1">
+                  <AdminPostForm
+                    post={post}
+                    onSuccess={fetchPosts}
+                    mode="edit"
+                  />
+                </div>
+              )}
+            </div>
           ))}
         </div>
       ) : (
