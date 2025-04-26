@@ -107,13 +107,17 @@ const PostDetail = () => {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
-        {isAdmin && (
-          <AdminPostActions
-            post={post}
-            onSuccess={handlePostDeleted}
-          />
-        )}
+        {/* Header section with title and admin actions */}
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-3xl font-bold">{post.title}</h1>
+          {isAdmin && (
+            <AdminPostActions
+              post={post}
+              onSuccess={handlePostDeleted}
+            />
+          )}
+        </div>
+        
         <PostAuthor />
 
         <div className="rounded-lg overflow-hidden my-8">
