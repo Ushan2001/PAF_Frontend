@@ -12,6 +12,15 @@ import LearningFeatures from "@/components/LearningFeatures";
 import LoadingPlaceholder from "@/components/LoadingPlaceholder";
 import AdminLearningPlanActions from "@/components/AdminLearningPlanActions";
 import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
 
 const LearningPlanDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +29,7 @@ const LearningPlanDetail = () => {
   // TODO: In a real app, this would be determined by user role from authentication
   const [isAdmin] = useState(true);
   const navigate = useNavigate();
+  const [showStartDialog, setShowStartDialog] = useState(false);
 
   const fetchPlan = async () => {
     try {
@@ -58,6 +68,10 @@ const LearningPlanDetail = () => {
       window.open(plan.pdfUrl, '_blank', 'noopener,noreferrer');
     }
   };
+  
+  const handleStartLearning = () => {
+    setShowStartDialog(true);
+  }
 
   if (loading) {
     return (
@@ -140,7 +154,7 @@ const LearningPlanDetail = () => {
                     </div>
                   </div>
 
-                  <Button className="w-full gradient-bg">Start Learning</Button>
+                  <Button className="w-full gradient-bg" onClick={handleStartLearning}>Start Learning</Button>
                   <Button variant="outline" className="w-full flex items-center justify-center" onClick={handleDownload}
                     disabled={!plan.pdfUrl}>
                     <Download className="mr-2 h-4 w-4" />
@@ -174,6 +188,85 @@ const LearningPlanDetail = () => {
           </div>
         </div>
       </div>
+      <Dialog open={showStartDialog} onOpenChange={setShowStartDialog}>
+        <DialogContent className="max-w-4xl max-h-screen overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Getting Started with {plan.title}</DialogTitle>
+            <DialogDescription>
+              Welcome to your learning journey! Here's what you need to know.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6 my-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Introduction</h3>
+              <p>
+                This learning plan will take you through all the essentials of web development.
+                Each module builds on the previous one, so we recommend following them in order.
+                Below you'll find the course materials and a structured approach to help you succeed.
+              </p>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Module Breakdown</h3>
+              <ul className="list-disc pl-6 space-y-2">
+                <li><strong>Module 1:</strong> HTML Foundations - Structure and Semantics</li>
+                <li><strong>Module 2:</strong> CSS Styling and Layout</li>
+                <li><strong>Module 3:</strong> JavaScript Basics</li>
+                <li><strong>Module 4:</strong> DOM Manipulation</li>
+                <li><strong>Module 5:</strong> Responsive Design</li>
+                <li><strong>Module 6:</strong> Web APIs and Fetch</li>
+                <li><strong>Module 7:</strong> Frontend Frameworks Introduction</li>
+                <li><strong>Module 8:</strong> Performance Optimization</li>
+                <li><strong>Module 9:</strong> Debugging and DevTools</li>
+                <li><strong>Module 10:</strong> Accessibility Best Practices</li>
+                <li><strong>Module 11:</strong> Version Control with Git</li>
+                <li><strong>Module 12:</strong> Deployment and Hosting</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Learning Materials</h3>
+              <div className="border rounded-lg p-4">
+                {plan.pdfUrl && (
+                  <div className="mb-4">
+                    <h4 className="font-medium mb-2">Course PDF</h4>
+                    <div className="aspect-video bg-gray-100 rounded-lg">
+                      <iframe 
+                        src={plan.pdfUrl} 
+                        className="w-full h-full" 
+                        title="Course PDF"
+                      >
+                        This browser does not support PDFs. Please download the PDF to view it.
+                      </iframe>
+                    </div>
+                  </div>
+                )}
+                
+                <div>
+                  <h4 className="font-medium mb-2">Additional Resources</h4>
+                  <ul className="list-disc pl-6">
+                    <li>Interactive coding exercises for each module</li>
+                    <li>Community forum access for questions and peer learning</li>
+                    <li>Weekly webinars with industry experts</li>
+                    <li>Project templates and starter files</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowStartDialog(false)}>Close</Button>
+            <Button onClick={() => {
+              // Here you could track that the user has started the course
+              window.open(`/learning-plans/${id}/module/1`, '_self');
+            }}>
+              Begin Module 1
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
