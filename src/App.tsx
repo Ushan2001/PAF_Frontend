@@ -13,6 +13,7 @@ import PostDetail from "./pages/PostDetail";
 import LearningPlans from "./pages/LearningPlans";
 import LearningPlanDetail from "./pages/LearningPlanDetail";
 import AdminPosts from "./pages/AdminPosts";
+import LogingPage from "./pages/LogingPage";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,8 @@ const App = () => (
           <Navbar />
           <main className="flex-grow">
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/" element={<LogingPage />} />
+              <Route path="/dashboard" element={<Index />} />
               <Route path="/posts" element={<Posts />} />
               <Route path="/post/:id" element={<PostDetail />} />
               <Route path="/learning-plans" element={<LearningPlans />} />
